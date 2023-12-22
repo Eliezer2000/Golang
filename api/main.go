@@ -1,6 +1,10 @@
 package main
 
-import "github.com/labstack/echo"
+import (
+	"database/sql"
+
+	"github.com/labstack/echo"
+)
 
 type Car struct {
 	Name  string
@@ -33,5 +37,24 @@ func createCar(c echo.Context) error {
 		return err
 	}
 	cars = append(cars, *car)
+	saveCar(*car)
 	return c.JSON(200, cars)
+}
+
+func saveCar(car Car) error {
+	db, err := sql.Open("postgres", "host=localhost port=5050 user=root password=root dbname=cars.db sslmode=disable")
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	stmt, err := db.Prepare("INSERT INTO cars (name, price) VALUES (s1, s2)")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(car.Name, car.Price)
+	if err != nil {
+		return err
+	}
+	return nil
 }
