@@ -13,6 +13,7 @@ func main() {
 	fmt.Println(x())
 	fmt.Println(x())
 
+	
 	b := i()
 	fmt.Println(b())
 	fmt.Println(b())
