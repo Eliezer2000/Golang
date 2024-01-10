@@ -15,12 +15,16 @@ func main() {
 	var wg sync.WaitGroup
 	wg.Add(totalgoroutines)
 
+	var mu sync.Mutex
+
 	for i := 0; i < totalgoroutines; i++{
 		go func() {
+			mu.Lock()
 			v := contador
 			runtime.Gosched()
 			v++
 			contador = v
+			mu.Unlock()
 			wg.Done()
 		}()
 	}
